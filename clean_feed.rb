@@ -3,6 +3,7 @@ require 'rubygems'
 require 'classifier'
 require 'nokogiri'
 require 'sanitize'
+require 'chronic'
 require 'rss'
 
 # Set up a decent HTML sanitizer (to purge the feedburner ad bullshit)
@@ -27,19 +28,30 @@ xml.search('/root/data').each do |data|
 end
 
 # Parse the feed and copy it to a new feed.
-rj_feed = RSS::Parser.parse(open('http://feeds.feedburner.com/RiftJunkies-RiftDeveloperTrackerFeed'), false)
+rj_feed = Nokogiri::Slop(open('http://feeds.feedburner.com/RiftJunkies-RiftDeveloperTrackerFeed').read)
 clean_feed = RSS::Maker.make('2.0') do |m|
   m.channel.title = 'Rift Dev Tracker (via RiftJunkies)'
   m.channel.link = 'http://www.riftjunkies.com/dev-tracker/'
   m.channel.description = 'A cleaned-up RiftJunkies devtracker feed. Moderation-related posts (thread cleanup/closure notices) should be gone.'
 
-  rj_feed.items.each do |item|
-    unless b.classify(item.description).downcase == 'moderation'
+  rj_feed.rss.channel.item.each do |item|
+    # For some reason, this attribute isn't available in the sloppy structure.
+    # The sanitizing is mainly to remove the stupid feedburner ads.
+    desc = Sanitize.clean(item.search('description').first.content, SANITIZE_CONF)
+
+    unless b.classify(desc).downcase == 'moderation'
       i = m.items.new_item
-      i.title = item.title
-      i.link = item.link
-      i.description = Sanitize.clean(item.description, SANITIZE_CONF)
-      i.date = item.date    
+      i.title = item.title.content
+      i.link = item.link.content
+      i.description = desc 
+      i.date = Chronic.parse(item.date.content) # to lazy to use strptime
+      i.author = item.dev.content
+      
+      # wtf ...
+      category = RSS::Maker::RSS20::Items::Item::Categories::Category.new nil 
+      category.content = item.forum.content
+      i.categories << category
+
     end
   end
 end
