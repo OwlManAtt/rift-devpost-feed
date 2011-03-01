@@ -21,7 +21,7 @@ SANITIZE_CONF = {
 }
 
 # Train the filter. 
-b = Classifier::Bayes.new 'moderation', 'noteworthy' 
+b = Classifier::Bayes.new 'moderation', 'noteworthy', 'service-status' 
 xml = Nokogiri::XML(open('training.xml'))
 xml.search('/root/data').each do |data|
   b.train data.search('category').first.content.to_s, data.search('text').first.content.to_s
@@ -32,14 +32,14 @@ rj_feed = Nokogiri::Slop(open('http://feeds.feedburner.com/RiftJunkies-RiftDevel
 clean_feed = RSS::Maker.make('2.0') do |m|
   m.channel.title = 'Rift Dev Tracker (via RiftJunkies)'
   m.channel.link = 'http://www.riftjunkies.com/dev-tracker/'
-  m.channel.description = 'A cleaned-up RiftJunkies devtracker feed. Moderation-related posts (thread cleanup/closure notices) should be gone.'
+  m.channel.description = 'A cleaned-up RiftJunkies devtracker feed. Moderation-related posts (thread cleanup/closure notices) and service status posts should be gone.'
 
   rj_feed.rss.channel.item.each do |item|
     # For some reason, this attribute isn't available in the sloppy structure.
     # The sanitizing is mainly to remove the stupid feedburner ads.
     desc = Sanitize.clean(item.search('description').first.content, SANITIZE_CONF)
 
-    unless b.classify(desc).downcase == 'moderation'
+    if ['noteworthy'].include? b.classify(desc).downcase
       i = m.items.new_item
       i.title = item.title.content
       i.link = item.link.content

@@ -83,4 +83,39 @@ We've closed this thread and would like to take a moment to explain why. If you 
 Thank you!
    </text>
   </data>
+  <data>
+    <category>service-status</category>
+    <text>Seastone, Belmont, Aedraxis, and Spritescar are unlocking now.</text>
+  </data>
+  <data>
+    <category>service-status</category>
+    <text>Servers should be starting back up shortly.</text>
+  </data>
+  <data>
+    <category>service-status</category>
+    <text>This set of four servers is going under for another restart to set it back to normal. Investigation into the root cause of the recent instability is still ongoing. </text>
+  </data>
+  <data>
+    <category>service-status</category>
+    <text>Hi all,
+
+Engineers are currently taking a look at the issues occuring on the Seastone, Belmont, Aedraxis, and Spitescar cluster. They're in the process of restarting things now and also investigating the root cause of the repeat server rollovers.
+
+I'll update here as soon as we have more solid information.</text>
+  </data>
+  <data>
+    <category>moderation</category>
+    <text>This thread has been closed per the thread author's request, but recruitment is still active and open. </text>
+  </data>
+  <data>
+    <category>service-status</category>
+    <text>The North America region servers will be coming down for a small update at 1:00pm PST. Estimated downtime is ** 30 minutes **.
+
+Included in this update are additional server performance/stability fixes.
+
+More information posted here as I get it!
+
+EDIT: 1:11pm PST
+Shards are coming back locked shortly. </text>
+  </data>
 </root>
