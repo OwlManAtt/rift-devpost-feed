@@ -1,0 +1,17 @@
+== Intro ==
+This is a simple script to clean up the RiftJunkies dev post tracker. 
+It's largely useless due to the volume of moderation/service status posts - I
+only want to hear interesting news in my RSS reader.
+
+== Installation ==
+Pull the source down and install these gems:
+
+  $ gem install chronic sanitize nokogiri classifier
+
+You may also want to install the Ruby bindings for the GNU GSL library - this
+speeds up the bayesian filtering. On Debian systems, the package is called ``libgsl-ruby''.
+
+This script has only been tested on Ruby 1.8.
+
+== Usage == 
+clean_feed.rb dumps out current.rss. Stick it in cron and profit.

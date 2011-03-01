@@ -6,7 +6,7 @@ require 'sanitize'
 require 'chronic'
 require 'rss'
 
-# Set up a decent HTML sanitizer (to purge the feedburner ad bullshit)
+# Set up a decent HTML sanitizer (to purge the feedburner ads)
 SANITIZE_CONF = {
   :elements => %w[
     b blockquote br cite code em i li mark ol p pre
@@ -36,7 +36,7 @@ clean_feed = RSS::Maker.make('2.0') do |m|
 
   rj_feed.rss.channel.item.each do |item|
     # For some reason, this attribute isn't available in the sloppy structure.
-    # The sanitizing is mainly to remove the stupid feedburner ads.
+    # The sanitizing is mainly to remove the stupid feedburner junk.
     desc = Sanitize.clean(item.search('description').first.content, SANITIZE_CONF)
 
     if ['noteworthy'].include? b.classify(desc).downcase
